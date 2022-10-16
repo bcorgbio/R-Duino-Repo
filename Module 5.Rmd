@@ -1,0 +1,69 @@
+---
+title: "Module 5 Report"
+author: "R-Duino - Chris, Joe, Karim, Brianna"
+date: "10/14/2022"
+output: html_document
+#bibliography: MAKE A BIBLIOGRAPHY AND UNCOMMENT
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+```{css, echo=FALSE}
+h1, h4 {
+  text-align: center;
+  color: blue;
+  font-weight: bold;
+}
+```
+
+## Introduction 
+In this project, we assessed the impact of activity level on body temperature across various human subjects. In order to do this, we used a DHT11 sensor attached to an Arduino Uno unit to accurately measure and store the temperature data for each of our group members. Additionally, to see how this changes with activity level, each group member had their temperature measured over 100 seconds while sitting on the couch, and then after 5 minutes of jumping jacks.
+
+
+
+## Methods
+Write methods here! ;)
+
+
+
+## Results and Plots
+```{r, echo=FALSE, message = FALSE, fig.align ='center', fig.cap= "Fig1: Figure 1 depits a box plot for body temperature data of all group members performed while at rest and after one minute of activity (sitting on couch and one minute of jumping jacks). Means are denoted by black dot."}
+dat.f <- list.files(pattern = "Couch|Active.csv")
+
+dat.l <- list() 
+
+for(i in dat.f){
+  met.dat<- unlist(strsplit(i,"_")) 
+  who <- met.dat[1] 
+  activity <- gsub(".csv","",met.dat[2]) 
+  dat.l[[i]]<- read_csv(i)%>%
+    mutate(who=who,activity=activity) %>%
+    group_by(who, activity) %>% 
+    mutate(mean = mean(degC))
+}
+dat <- do.call(rbind,dat.l) 
+
+dat%>%
+  ggplot(aes(x=activity,y=degC))+geom_boxplot()+stat_summary(fun = "mean", geom = "point", shape = 20, size = 4, fill = "white")+facet_grid(.~who) 
+```
+
+
+
+
+## Discussion
+Write discussion here
+
+
+
+## Contributions
+Chris Peters: Assembling arduino sketch and hardware, setting up and formatting markdown code, creating the code for the plot
+Joe:
+Karim:
+Brianna
+
+
+
+## References
+Write references here or bib? i think
