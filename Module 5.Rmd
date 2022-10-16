@@ -3,7 +3,7 @@ title: "Module 5 Report"
 author: "R-Duino - Chris, Joe, Karim, Brianna"
 date: "10/14/2022"
 output: html_document
-#bibliography: MAKE A BIBLIOGRAPHY AND UNCOMMENT
+bibliography: S0031938497005465.bib
 ---
 
 ```{r setup, include=FALSE}
