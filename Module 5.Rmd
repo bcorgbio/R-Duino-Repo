@@ -3,7 +3,7 @@ title: "Module 5 Report"
 author: "R-Duino - Chris, Joe, Karim, Brianna"
 date: "10/14/2022"
 output: html_document
-bibliography: S0031938497005465.bib
+bibliography: r_duino_bib.bib
 ---
 
 ```{r setup, include=FALSE}
@@ -19,7 +19,7 @@ h1, h4 {
 ```
 
 ## Introduction 
-The central theme of this project will be to assess the impact of activity level on body temperature across various human subjects. Past literature from Chin Leong Lim shows that Gastrointestinal temperature increases by a few degrees Celsius with activity as a result of the large amount of mechanical energy converted to heat during exercise. This icnrease rarely ever exceeds 1 or 2 degrees Celsius though as a result of thermoregulation. Based on this study, we hypothesize that we will see  increases in activity correlate with small increases in body temperature in humans, but nothing larger than a few degrees Celsius as a result of the role of thermoregulatory mechanisms in maintaining physiological homeostasis. 
+The central theme of this project will be to assess the impact of activity level on body temperature across various human subjects. Past literature from Chin Leong Lim shows that Gastrointestinal temperature increases by a few degrees Celsius with activity as a result of the large amount of mechanical energy converted to heat during exercise [@lim2008human]. This increase rarely ever exceeds 1 or 2 degrees Celsius though as a result of thermoregulation. Based on this study, we hypothesize that we will see  increases in activity correlate with small increases in body temperature in humans, but nothing larger than a few degrees Celsius as a result of the role of thermoregulatory mechanisms in maintaining physiological homeostasis. 
 
 ## Methods
 To measure the body temperature of our human subjects, we  programmed an Arduino Uno unit (using the code provided in the module 5 project outline) to measure and store  temperature data to be obtained using a DHT11 sensor attached to the unit. Then, each group member had their temperature measured over 100 seconds while sitting on the couch, and then over 100 seconds after 5 minutes of jumping jacks. This data was then separately analyzed to create a table summarizing the mean temperature for each group member during each activity plus or minus 1 standard deviation. 
