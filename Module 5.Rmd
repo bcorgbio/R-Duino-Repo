@@ -19,7 +19,7 @@ h1, h4 {
 ```
 
 ## Introduction 
-The central theme of this project will be to assess the impact of activity level on body temperature across various human subjects. Past literature from Chin Leong Lim shows that Gastrointestinal temperature increases by a few degrees Celsius with activity as a result of the large amount of mechanical energy converted to heat during exercise [@lim2008human]. This increase rarely ever exceeds 1 or 2 degrees Celsius though as a result of thermoregulation. Based on this study, we hypothesize that we will see  increases in activity correlate with small increases in body temperature in humans, but nothing larger than a few degrees Celsius as a result of the role of thermoregulatory mechanisms in maintaining physiological homeostasis. 
+The goal of this project will be to assess the impact of activity level on body temperature across various human subjects. Prior research showed that gastrointestinal temperature increased by a few degrees Celsius with activity due to the conversion of mechanical energy to heat during exercise [@lim2008human]. This increase rarely ever exceeded 1 or 2 degrees Celsius because of thermoregulation. We hypothesize that we will see that an increase in activity correlates with a slight increase in body temperature in humans, as endotherms employ many thermoregulatory mechanisms to maintain homeostasis. 
 
 ## Methods
 To measure the body temperature of our human subjects, we  programmed an Arduino Uno unit (using the code provided in the module 5 project outline) to measure and store  temperature data to be obtained using a DHT11 sensor attached to the unit. Then, each group member had their temperature measured over 100 seconds while sitting on the couch, and then over 100 seconds after 5 minutes of jumping jacks. This data was then separately analyzed to create a table summarizing the mean temperature for each group member during each activity plus or minus 1 standard deviation. 
@@ -54,7 +54,7 @@ The comparison of the data allows us to determine that activity level and body t
 ## Contributions
 Chris Peters: Assembling arduino sketch and hardware, setting up and formatting markdown code, creating the code for the plot
 Joe:Found study about the effect of activity on body temperature in mice, wrote the introduction, methods,  results and discussion sections.
-Karim:
+Karim: General rmd formatting, put together bibliography, and editing for the discussion & intro.
 Brianna
 
 
