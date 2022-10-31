@@ -1,0 +1,31 @@
+---
+title: "R-Duino Module 6"
+author: "Joseph Milosh"
+date: "2022-10-31"
+output: html_document
+bibliography: BIOL3140_RDuino_mod6.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+```{css, echo=FALSE}
+h1, h4 {
+  text-align: center;
+  color: blue;
+  font-weight: bold;
+}
+```
+
+# Introduction
+
+# Methods
+
+# Results
+
+# Discussion
+
+# Author Contributions
+
+# References
