@@ -50,6 +50,7 @@ forewings %>%
 
 hindwings %>% 
   stack()
+
 fore.min <- forewings %>% 
   coo_nb() %>% 
   min()
@@ -58,6 +59,7 @@ forewings %>%
   coo_interpolate(fore.min) %>% 
   fgProcrustes() %>% 
   stack()
+
 hind.min <- hindwings %>% 
   coo_nb() %>% 
   min()
@@ -68,6 +70,7 @@ hindwings %>%
   coo_align()  %>%
   fgProcrustes() %>%
   stack()
+
 forewings %>%
   coo_interpolate(fore.min) %>% 
   coo_align()  %>%
@@ -122,9 +125,11 @@ plot(lep.tree,cex=0.1)
 lep.tree$tip.label <- gsub("_"," ",lep.tree$tip.label)
 basename(names(outs))[1:5]
 lep.sp <- read_csv("lep_image_data.csv")
+head(lep.sp$identifier)
 out.data <- tibble(xy.file=basename(names(outs))) %>% 
   mutate(identifier=gsub("XY_|_hindwing|_forewing|.txt","",xy.file)) %>% 
   left_join(lep.sp)
+head(out.data)
 
 hindwing.pca2 <-  tibble(xy.file=basename(rownames(hindwing.pca$x)),PC1=hindwing.pca$x[,1],PC2=hindwing.pca$x[,2]) %>% 
   left_join(out.data)
@@ -194,11 +199,17 @@ hindPC1.BM<-brownie.lite(lep.tree2,hind.pc1*10)
 
 forePC2.BM<-brownie.lite(lep.tree2,fore.pc2*10)
 hindPC2.BM<-brownie.lite(lep.tree2,hind.pc2*10)
+forePC1.BM$sig2.single
+
 library(RRphylo)
 hindPC1.RR <- RRphylo(tree=lep.tree2,y=hind.pc1)
+hindPC1.RR$rates
 hindPC1.SS<- search.shift(RR=hindPC1.RR,status.type="clade")
+hindPC1.SS$single.clades
+
 plot(lep.tree2)
 nodelabels(node = as.numeric(rownames(hindPC1.SS$single.clades)),text = rownames(hindPC1.SS$single.clades))
+
 hindPC1.plot <- plotShift(RR=hindPC1.RR,SS=hindPC1.SS)
 
 forePC1.plot <- plotShift(RR=hindPC1.RR,SS=hindPC1.SS)
