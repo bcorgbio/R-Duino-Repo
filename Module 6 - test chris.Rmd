@@ -100,6 +100,9 @@ hindwing.pca <-hindwings %>%
 ```{r, echo=FALSE, message = FALSE, fig.align ='center', fig.cap="Fig1: this is figure one"}
 forewing.pca %>% 
   plot_PCA(title = "forewings")
+```
+
+```{r, echo=FALSE, message = FALSE, fig.align ='center', fig.cap="Fig2: this is figure two"}
 hindwing.pca %>% 
   plot_PCA(title = "hindwings")
 ```
@@ -236,7 +239,7 @@ plot_SS <- function(tre=NULL,SS=NULL,tax=NULL){
 }
 ```
 
-```{r, echo=FALSE, message = FALSE, fig.align ='center', fig.cap="Fig13: this is figure three"}
+```{r, echo=FALSE, message = FALSE, fig.align ='center', fig.cap="Fig5: this is figure three"}
 tax.names <- readRDS("Lep_classification.RDS")
 hindPC1.res <- plot_SS(lep.tree2,hindPC1.SS,tax = tax.names)
 hindPC1.res$plot
