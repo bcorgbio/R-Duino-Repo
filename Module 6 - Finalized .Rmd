@@ -3,7 +3,17 @@ title: "Mod6"
 author: "R-Duino - Chris, Joe, Karim, Brianna"
 date: "11/6/2022"
 output: html_document
+bibliography: BIOL3140_RDuino_mod6.bib
 ---
+## Introduction
+
+
+
+## Methods
+
+
+
+## Results and Plots
 ```{r, packages, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
@@ -331,5 +341,15 @@ PC1.pic %>%
   ggplot(aes(x=fore,y=hind))+geom_point()+geom_smooth(method="lm")
 summary(lm(hind~fore,PC1.pic))
 ```
+
+
+## Discussion
+
+
+
+## Contributions
+
+
+## References
 
 
