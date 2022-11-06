@@ -1,11 +1,9 @@
 ---
-title: "Module 6 Report"
+title: "Mod6"
 author: "R-Duino - Chris, Joe, Karim, Brianna"
 date: "11/6/2022"
 output: html_document
 ---
-
-
 ```{r, packages, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
@@ -26,50 +24,48 @@ h1, h4 {
 }
 ```
 <center>
-
-## Introduction
-
-
-
-## Methods
-
-
-
-## Results and Plots
-
-```{r, include=FALSE}
+```{r, echo= FALSE, include= FALSE}
 f <- list.files("class_out_data",pattern=".txt|.csv",full.names = TRUE)
+
 out <- read_delim(f[1],delim="\t") %>% 
   as.matrix()
+
 out %>% 
   list() %>% 
   Out() %>% 
-  coo_flipx() %>% 
-  stack() 
+  coo_flipx()
+
 out.df <- vroom::vroom(f, id = "filename")
-out.df <- out.df %>% 
+
+outs.l <- sapply(f,function(x) out.df %>% filter(filename==x) %>% select(X,Y) %>% as.matrix)
+outs.l %>% 
+  Out() %>% 
+  coo_flipx()
+
+out.df <- vroom::vroom(f, id = "filename") %>% 
   mutate(wing=gsub("XY_.+_(hindwing|forewing)\\..+","\\1",basename(filename))) %>% 
   na.omit()
+
 outs.l <- sapply(f,function(x) out.df %>% filter(filename==x) %>% select(X,Y) %>% as.matrix)
-wings <- gsub("XY_.+_(hindwing|forewing)\\..+","\\1",basename(names(outs.l))) 
+
+wings <- gsub("XY_.+_(hindwing|forewing)\\..+","\\1",basename(names(outs.l)))
 outs <-  outs.l %>% 
   Out(fac=list(wing=wings)) %>% 
   coo_flipx()
+
 forewings <- outs %>% 
   filter(wing=="forewing")
 hindwings <- outs %>% 
   filter(wing=="hindwing")
-forewings %>% 
-  stack()
-hindwings %>% 
-  stack()
+
 fore.min <- forewings %>% 
   coo_nb() %>% 
-  min() 
+  min()
+
 forewings %>%
-  coo_interpolate(fore.min) %>%
-  fgProcrustes() %>%
-  stack()
+  coo_interpolate(fore.min) %>% 
+  fgProcrustes()
+
 hind.min <- hindwings %>% 
   coo_nb() %>% 
   min()
@@ -77,11 +73,19 @@ hindwings %>%
   coo_interpolate(hind.min) %>% 
   coo_slide(id=1) %>% 
   coo_align()  %>%
-  fgProcrustes() %>%
-  stack()
-```
+  fgProcrustes()
 
-```{r, include=FALSE}
+#EFA
+forewings %>%
+  coo_interpolate(fore.min) %>% 
+  coo_align()  %>%
+  fgProcrustes() %>% 
+  efourier(norm=FALSE) 
+hindwings %>% 
+  coo_interpolate(hind.min) %>% 
+  coo_align()  %>%
+  fgProcrustes() %>% 
+  efourier(norm=FALSE) 
 forewing.pca <- forewings %>%
   coo_interpolate(fore.min) %>%
   coo_align()  %>%
@@ -98,33 +102,34 @@ hindwing.pca <-hindwings %>%
   PCA()
 ```
 
-```{r, echo=FALSE, message = FALSE, fig.align ='center', fig.cap="Fig1: this is figure one"}
+#### Analysis of PCA Plots
+```{r, echo= FALSE, message= FALSE}
 forewing.pca %>% 
   plot_PCA(title = "forewings")
-```
-
-```{r, echo=FALSE, message = FALSE, fig.align ='center', fig.cap="Fig2: this is figure two"}
 hindwing.pca %>% 
   plot_PCA(title = "hindwings")
 ```
 
-```{r, include=FALSE}
-lep.tree <- ape::read.tree("lep_tree2.tre")
-lep.tree <- ladderize(lep.tree)
-plot(lep.tree,cex=0.1)
+#### Comparitive Analysis
+```{r, echo= FALSE, message= FALSE}
+lep.tree <- ape::read.tree("lep_tree2.tre") %>% ladderize()
 lep.tree$tip.label <- gsub("_"," ",lep.tree$tip.label)
+plot(lep.tree,cex=0.1)
+```
+
+```{r, echo= FALSE, include= FALSE}
 lep.sp <- read_csv("lep_image_data.csv")
 out.data <- tibble(xy.file=basename(names(outs))) %>% 
   mutate(identifier=gsub("XY_|_hindwing|_forewing|.txt","",xy.file)) %>% 
   left_join(lep.sp)
+#new tibble
 hindwing.pca2 <-  tibble(xy.file=basename(rownames(hindwing.pca$x)),PC1=hindwing.pca$x[,1],PC2=hindwing.pca$x[,2]) %>% 
   left_join(out.data)
 forewing.pca2 <-  tibble(xy.file=basename(rownames(forewing.pca$x)),PC1=forewing.pca$x[,1],PC2=forewing.pca$x[,2])%>% 
   left_join(out.data)
 ```
 
-
-```{r, include=FALSE}
+```{r, echo= FALSE, include= FALSE}
 drops <- lep.tree$tip.label[!lep.tree$tip.label%in%unique(out.data$species)]
 lep.tree2 <- drop.tip(lep.tree,drops)
 #PC1
@@ -150,52 +155,86 @@ names(fore.pc1) <-  forewing.pca2 %>%
   pull(species)
 #PC2
 hind.pc2 <- hindwing.pca2 %>% 
-    filter(species%in% lep.tree2$tip.label) %>% 
+  filter(species%in% lep.tree2$tip.label) %>% 
   group_by(species) %>% 
   summarize(PC2=mean(PC2)) %>% 
   pull(PC2)
 names(hind.pc2) <-  hindwing.pca2%>% 
-    filter(species%in% lep.tree2$tip.label) %>% 
+  filter(species%in% lep.tree2$tip.label) %>% 
   group_by(species) %>%
   summarize(PC2=mean(PC2)) %>% 
   pull(species)
 fore.pc2 <- forewing.pca2 %>% 
-    filter(species%in% lep.tree2$tip.label) %>% 
-   group_by(species) %>% 
+  filter(species%in% lep.tree2$tip.label) %>% 
+  group_by(species) %>% 
   summarize(PC2=mean(PC2)) %>% 
   pull(PC2)
 names(fore.pc2) <-  forewing.pca2 %>% 
   filter(species%in% lep.tree2$tip.label) %>% 
-     group_by(species) %>% 
+  group_by(species) %>% 
+  summarize(PC2=mean(PC2)) %>% 
+  pull(species)
+#PC2
+hind.pc2 <- hindwing.pca2 %>% 
+  filter(species%in% lep.tree2$tip.label) %>% 
+  group_by(species) %>% 
+  summarize(PC2=mean(PC2)) %>% 
+  pull(PC2)
+names(hind.pc2) <-  hindwing.pca2%>% 
+  filter(species%in% lep.tree2$tip.label) %>% 
+  group_by(species) %>%
+  summarize(PC2=mean(PC2)) %>% 
+  pull(species)
+fore.pc2 <- forewing.pca2 %>% 
+  filter(species%in% lep.tree2$tip.label) %>% 
+  group_by(species) %>% 
+  summarize(PC2=mean(PC2)) %>% 
+  pull(PC2)
+names(fore.pc2) <-  forewing.pca2 %>% 
+  filter(species%in% lep.tree2$tip.label) %>% 
+  group_by(species) %>% 
   summarize(PC2=mean(PC2)) %>% 
   pull(species)
 ```
 
-```{r, include=FALSE}
+
+### Results
+
+#### Evolutionary Rates of Hindwing and Forewing
+
+```{r, message= FALSE, include= FALSE}
 forePC1.BM<-brownie.lite(lep.tree2,fore.pc1*10)
 hindPC1.BM<-brownie.lite(lep.tree2,hind.pc1*10)
 forePC2.BM<-brownie.lite(lep.tree2,fore.pc2*10)
 hindPC2.BM<-brownie.lite(lep.tree2,hind.pc2*10)
 ```
-# Our Evolutionary Rates Shown Below
-```{r, include=TRUE}
+
+```{r, echo= FALSE}
 forePC1.BM$sig2.single
-hindPC1.BM$sig2.single
 forePC2.BM$sig2.single
+hindPC1.BM$sig2.single
 hindPC2.BM$sig2.single
 ```
 
-```{r, echo=FALSE, message = FALSE, fig.align ='center', fig.cap="Fig2: this is figure two"}
+#### Shifts in Evolutionary Rates
+
+```{r, echo= FALSE, message= FALSE}
 hindPC1.RR <- RRphylo(tree=lep.tree2,y=hind.pc1)
+hindPC2.RR <- RRphylo(tree=lep.tree2,y=hind.pc2)
+forePC1.RR <- RRphylo(tree=lep.tree2,y=fore.pc1)
+forePC2.RR <- RRphylo(tree=lep.tree2,y=hind.pc2)
+
 hindPC1.SS<- search.shift(RR=hindPC1.RR,status.type="clade")
-plot(lep.tree2)
-nodelabels(node = as.numeric(rownames(hindPC1.SS$single.clades)),text = rownames(hindPC1.SS$single.clades))
-hindPC1.plot <- plotShift(RR=hindPC1.RR,SS=hindPC1.SS)
-forePC1.plot <- plotShift(RR=hindPC1.RR,SS=hindPC1.SS)
-hindPC1.plot$plotClades()
+hindPC1.SS$single.clades
+hindPC2.SS<- search.shift(RR=hindPC2.RR,status.type="clade")
+hindPC2.SS$single.clades
+forePC1.SS<- search.shift(RR=forePC1.RR,status.type="clade")
+forePC1.SS$single.clades
+forePC2.SS<- search.shift(RR=forePC2.RR,status.type="clade")
+forePC2.SS$single.clades
 ```
 
-```{r, include=FALSE}
+```{r, echo= FALSE, message= FALSE}
 plot_SS <- function(tre=NULL,SS=NULL,tax=NULL){
   
   nodes <- as.numeric(rownames(SS$single.clades))
@@ -205,7 +244,6 @@ plot_SS <- function(tre=NULL,SS=NULL,tax=NULL){
   for(i in nodes){
     sp.i <- extract.clade(tre,i)$tip.label
     
-    #print(head(tax))
     sub.names <- lapply(tax,function(x) x[x%in%sp.i]) 
     
     in.clades <- lapply(sub.names,function(x) length(x)>0) 
@@ -245,57 +283,38 @@ plot_SS <- function(tre=NULL,SS=NULL,tax=NULL){
   return(list(plot=p,res=res))
   
 }
+tax.names <- readRDS("Lep_classification.RDS")
 ```
 
-```{r, echo=FALSE, message = FALSE, fig.align ='center', fig.cap="Fig5: this is figure three"}
-tax.names <- readRDS("Lep_classification.RDS")
+#### Hindwing PC1
+
+```{r, echo=FALSE, message=FALSE}
 hindPC1.res <- plot_SS(lep.tree2,hindPC1.SS,tax = tax.names)
 hindPC1.res$plot
+hindPC1.res$res
 ```
 
-```{r, echo=FALSE, message = FALSE, fig.align ='center', fig.cap="Fig4: this is figure four"}
-hindPC1.pic <- pic(hind.pc1,phy = lep.tree2)
-forePC1.pic <- pic(fore.pc1,phy = lep.tree2)
-PC1.pic <- tibble(
-  hind=hindPC1.pic,
-  fore=forePC1.pic
-)
-PC1.pic %>% 
-  ggplot(aes(x=fore,y=hind))+geom_point()+geom_smooth(method="lm")
-summary(lm(hind~fore,PC1.pic))
+#### HindwingPC2
+
+```{r, echo=FALSE, message=FALSE}
+hindPC2.res <- plot_SS(lep.tree2,hindPC2.SS,tax = tax.names)
+hindPC2.res$plot
+hindPC2.res$res
 ```
 
+#### ForewingPC1
 
+```{r, echo=FALSE, message=FALSE}
+forePC1.res <- plot_SS(lep.tree2,forePC1.SS,tax = tax.names)
+forePC1.res$plot
+forePC1.res$res
+```
 
+#### ForewingPC2
 
-
-
-
-
-## Discussion
-
-
-
-## Contributions
-
-
-## References
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+```{r, echo=FALSE, message=FALSE}
+forePC2.res <- plot_SS(lep.tree2,forePC2.SS,tax = tax.names)
+forePC2.res$plot
+forePC2.res$res
+```
 
