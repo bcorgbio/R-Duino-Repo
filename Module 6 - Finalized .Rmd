@@ -34,7 +34,7 @@ Outline analysis was used to compare the change in wing shape across species. Fo
 To assess the evolutionary rates of hind- and forewings, we evaluated the evolutionary rates of our PC scores for the hind- and fore wings. 
 
 #### Evolutionary Rates
- To analyze evolutionary rates, a Brownian motion model was applied to the Lepidoptera phylogenetic tree with the respective PC1 and 2 scores mapped into the tree for each wing. This method provides individual evolutionary rates for PC score on each wing, allowing for easy comparison.
+To analyze evolutionary rates, a Brownian motion model was applied to the Lepidoptera phylogenetic tree with the respective PC1 and 2 scores mapped into the tree for each wing. This method provides individual evolutionary rates for PC score on each wing, allowing for easy comparison.
  
 #### Shifts in Evolutionary Rates
 Using phylogenetic ridge regression, the changes in evolutionary rates could be analyzed. This method highlights differences in the evolutionary rates between different clades. A blue arrow indicates a slower rate of evolutionary change (purifying selection), while a red arrow indicates a higher rate of evolutionary change (positive selection).
@@ -391,10 +391,11 @@ Wing shape appears to be generally conserved in their respective groups, as the 
 
 
 ## Contributions
-Chris: Outlines for himself and Brianna, Porting over and cleaning up of code from class
-Joe: Outlines, Fixing of code, Introduction, Methods, and  Bibliography
-Karim: Outlines, Discussion, Results, Methods, and Bibliography
-Briana:
+
+- Chris: Outlines for himself and Brianna, Porting over and cleaning up of code from class
+- Joe: Outlines, Fixing of code, Introduction, Methods, and  Bibliography
+- Karim: Outlines, Discussion, Results, Methods, and Bibliography
+- Briana:
 
 ## References
 
