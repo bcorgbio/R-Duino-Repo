@@ -6,6 +6,10 @@ output: html_document
 bibliography: BIOL3140_RDuino_mod6.bib
 ---
 ## Introduction
+The Lepidoptera can be found in almost every terrestrial ecosystem playing a fundamental role. Inside of this extremely important order of insects, there are 160,000 described extant species with a wide variety of paired wing mechanisms. Despite this variety and the different selective pressures that each species inhabits, each member of this family has pairs of hindwings and forewings with unique roles in powered flight. Studies in the past have investigated the specific role of the hindwing and the forewing during flight on the species level. For example, Jantzen and Eisner (2008) found that butterflies can fly without hindwings, but suffer speed and maneuverability issues. Despite the importance of studies like Jantzen and Eisner’s, they are limited in their ability to assess shape variables and ecological roles of the fore- and hindwings over evolutionary timescales and across lineages/species. Comparative studies have also been used to asses the patterns of fore- and hindwing shape across the Lepidoptera. For example, Strauss (1990) found that in heliconiine and ithomiine butterflies, the shape of hindwings is much more variable than the shape of forewings. Again, although this study, and studies like it, are important in their own right, they do not answer if shape differs consistently across the Lepidoptera due to their limited phylogenetic scope (each study only encompasses a few species spanning a few families of butterflies). The goal of this study is to assess wing-shape evolution across the Lepidoptera, including hundreds of species of moths and butterflies. This will be done by characterizing the shape outline of fore- and hindwings from about 200 species of Lepidoptera to answer the following questions:
+1. Do hind- and forewings vary in their evolutionary rates?
+2. Does the evolvability of the hind- and forewings vary significantly among major lineages of moths and butterflies?
+3. Is hindwing and forewing shape correlated?
 
 
 
