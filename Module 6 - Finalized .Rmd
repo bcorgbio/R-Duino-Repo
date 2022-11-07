@@ -16,6 +16,8 @@ The Lepidoptera can be found in almost every terrestrial ecosystem playing a fun
 
 ## Methods
 
+### Preparing our Data to Answer our Questions
+
 #### Image Acquisition
  In order to amass a large data set of morphometric data for both moths and butterflies, a dataset obtained from the Global Biodiversity Information Facility (GBIF) was used. This dataset can easily be accessed by using the R package rgif, which permits access to the GBIF’s application programming interface (API), rendering there morphological records searchable from the command line. 
 
@@ -28,6 +30,10 @@ In order to conduct shape analysis, the right hind- and forewings from images of
 #### Shape Analysis
 Outline analysis was used to compare the change in wing shape across species. For our purposes, elliptical Fourier analysis (EFA) was used. In order to analyze the EFA output and determine the source of the important variance between wing shapes in less variables, Principal Componenets Analysis (PCA) was used. EFA and PCA analysis was done using commands from the Momocs package in R and joining of data matrices from the Momocs package was preformed using the vroom() command from the vroom package.
 
+### Analyzing our Data To Answer our Questions
+
+#### Comparative Analysis
+To assess the evolutionary rates of hind- and forewings, we evaluated the evolutionary rates of our PC scores for the hind- and fore wings
 
 
 ## Results and Plots
@@ -225,7 +231,7 @@ names(fore.pc2) <-  forewing.pca2 %>%
 ```
 
 
-### Results
+## Results
 
 #### Evolutionary Rates of Hindwing and Forewing
 
@@ -366,7 +372,7 @@ summary(lm(hind~fore,PC1.pic))
 
 ## Contributions
 Chris: Outlines for himself and Brianna, Porting over and cleaning up of code from class
-Joe: Outlines, Fixing of code, Introduction, Bibliography
+Joe: Outlines, Fixing of code, Introduction, Methods, and  Bibliography
 Karim:
 Briana:
 
