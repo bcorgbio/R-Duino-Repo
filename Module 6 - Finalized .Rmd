@@ -32,8 +32,14 @@ Outline analysis was used to compare the change in wing shape across species. Fo
 
 ### Analyzing our Data To Answer our Questions
 
-#### Comparative Analysis
-To assess the evolutionary rates of hind- and forewings, we evaluated the evolutionary rates of our PC scores for the hind- and fore wings
+#### Do Hindwings and Forewings Vary in their Evolutionary Rates?
+
+1. Comparative Analysis: To assess the evolutionary rates of hind- and forewings, we evaluated the evolutionary rates of our PC scores for the hind- and fore wings.
+2.
+
+#### Does the evolvability of the hind- and forewings vary significantly among major lineages of moths and butterflies?
+
+#### Is hindwing and forewing shape correlated?
 
 
 ## Results and Plots
