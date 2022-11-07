@@ -16,6 +16,11 @@ The Lepidoptera can be found in almost every terrestrial ecosystem playing a fun
 
 ## Methods
 
+#### Image Acquisition
+ In order to amass a large data set of morphometric data for both moths and butterflies, a dataset obtained from the Global Biodiversity Information Facility (GBIF) was used. This dataset can easily be accessed by using the R package rgif, which permits access to the GBIF’s application programming interface (API), rendering there morphological records searchable from the command line. 
+
+#### Species List and Phylogeny
+This project will be comparing wing shape across species of the Lepidotera, making it a comparative study. As a result, we used the phylogeny developed by @kawahara2019phylogenomics to base our results.
 
 
 ## Results and Plots
@@ -353,7 +358,10 @@ summary(lm(hind~fore,PC1.pic))
 
 
 ## Contributions
-
+Chris: Outlines for himself and Brianna, Porting over and cleaning up of code from class
+Joe: Outlines, Fixing of code, Introduction, Bibliography
+Karim:
+Briana:
 
 ## References
 
