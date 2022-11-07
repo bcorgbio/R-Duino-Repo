@@ -30,11 +30,14 @@ In order to conduct shape analysis, the right hind- and forewings from images of
 #### Shape Analysis
 Outline analysis was used to compare the change in wing shape across species. For our purposes, elliptical Fourier analysis (EFA) was used. In order to analyze the EFA output and determine the source of the important variance between wing shapes in less variables, Principal Componenets Analysis (PCA) was used. EFA and PCA analysis was done using commands from the Momocs package in R and joining of data matrices from the Momocs package was preformed using the vroom() command from the vroom package.
 
+####Comparative Analysis
+To assess the evolutionary rates of hind- and forewings, we evaluated the evolutionary rates of our PC scores for the hind- and fore wings. 
+
 ### Analyzing our Data To Answer our Questions
 
 #### Do Hindwings and Forewings Vary in their Evolutionary Rates?
 
-1. Comparative Analysis: To assess the evolutionary rates of hind- and forewings, we evaluated the evolutionary rates of our PC scores for the hind- and fore wings.
+Comparative Analysis: To assess the evolutionary rates of hind- and forewings, we evaluated the evolutionary rates of our PC scores for the hind- and fore wings.
 2.
 
 #### Does the evolvability of the hind- and forewings vary significantly among major lineages of moths and butterflies?
