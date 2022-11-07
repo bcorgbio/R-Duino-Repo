@@ -340,7 +340,7 @@ forePC2.res$res
 
 ### Shape Evolution Correlation
 
-```{r, echo=FALSE, message = FALSE, fig.align ='center', fig.cap="Fig4: this is figure four"}
+```{r, echo=FALSE, message = FALSE, fig.align ='center'}
 hindPC1.pic <- pic(hind.pc1,phy = lep.tree2)
 forePC1.pic <- pic(fore.pc1,phy = lep.tree2)
 PC1.pic <- tibble(
