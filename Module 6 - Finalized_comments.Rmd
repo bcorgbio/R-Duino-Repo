@@ -251,6 +251,16 @@ names(fore.pc2) <-  forewing.pca2 %>%
 
 ## Results
 
+<div class="comment">
+I think your PCA plots belong in the results. Also, they need a caption
+```{r}
+grade <- 75
+grade <- grade-2
+
+```
+
+</div>
+
 #### Evolutionary Rates of Hindwing and Forewing
 
 ```{r, message= FALSE, include= FALSE}
@@ -393,13 +403,24 @@ PC2.pic %>%
 summary(lm(hind~fore,PC1.pic))
 ```
 
+<div class="comment">
+It's not enough to print figures and numbers. We need a narrative for the results.
+```{r}
+grade <- 75
+grade <- grade-3
+
+```
+
+</div>
 
 ## Discussion
 A comparison of the evolutionary rates shows that changes in aspect ratio evolve three times faster in the forewing than in the high wing (PC1). While changes in wing length, relative to the body, seem to have evolved nearly two times faster in the hindwing (PC2). 
 An inverse relationship between PC1 was discovered in the hind and forewings, where a change increase in the aspect ratio of the forewing is correlated with a decrease in the hindwing. An opposite correlation was found between PC2 where wing length relative to the body increases in both hind and forewings.
 Wing shape appears to be generally conserved in their respective groups, as the only exceptional values observed result from low evolutionary shifts. The group Papilionoidea experienced astonishingly low rates of phenotypic variation according to PC2. The lack of variation in PC2 indicates that the span of the wings relative to the body in Papilionoidea is highly conserved. As indicated by previous authors, it is difficult to determine the cause of the purifying selection without examining each species' respective niche @le2019adaptive. Based upon the common physiological features of Papilionoidea, it can be inferred that the fore and hindwing span may be conserved as it is important in both hovering and predatory defense. The forewing aspect ratio, indicated by PC1 appears to be conserved in many groups including Pyraloidea, Noctuoidea, and many others. This result is expected considering the forewing was discovered to be the major contributor to flight @jantzen2008hindwings. The group Noctuoida was shown to experience low rates of evolution in aspect ratio for both the fore- and hind wings. This phenomenon indicates that flight mechanics are likely essential for the survival of species within Noctuidae. Based on a study conducted on groups Papilionoidea and Hesperioidea, researchers discovered “short, broad (low AR) wings would favour slow, agile flight” and “ long, slender  (high AR) wings would be associated with species that fly extensively,” where AR stands for aspect ratio @betts1988wing. These researchers demonstrated that aspect ratio plays an immense role in determining wing loading, which essentially can be used to describe flight mechanics. By complementing the data presented in this study with previous research, predictions can be made on the evolution of wing shape based on ecological constraints. Migratory groups or species, such as monarchs, likely have a high aspect ratio, while groups that evolved under frequent predation would likely have a low aspect ratio to swiftly evade predators.
 
-
+<div class="comment">
+Excellent discussion linking your results of previous work!
+</div>
 
 ## Contributions
 
@@ -408,6 +429,14 @@ Wing shape appears to be generally conserved in their respective groups, as the 
 - Karim: Outlines, Discussion, Results, End of Methods, and Bibliography
 - Briana:
 
+<div class="comment">
+Top notch stuff. Thanks for hanging in there and producing an analysis that is more reflective of graduate work. Just be sure to include a narative with your results and figure captions. Congrats to you all.
+```{r}
+print(grade)
+
+```
+
+</div>
 ## References
 
 
