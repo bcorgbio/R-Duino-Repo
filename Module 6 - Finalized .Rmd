@@ -5,8 +5,19 @@ date: "11/6/2022"
 output: html_document
 bibliography: 
 ---
+
+<!-- for comments -->
+<style>
+div.comment pre { background-color:#ffbbbb; }
+div.comment pre.r { background-color:#ffbbbb; }
+div.comment {color: red;}
+</style>
+
 ## Introduction
 
+<div class="comment">
+Excellent intro!
+</div>
 
 
 ## Methods
