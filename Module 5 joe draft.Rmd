@@ -1,0 +1,69 @@
+---
+title: "Module 5 Report"
+author: "R-Duino - Chris, Joe, Karim, Brianna"
+date: "10/14/2022"
+output: html_document
+#bibliography: MAKE A BIBLIOGRAPHY AND UNCOMMENT
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+```{css, echo=FALSE}
+h1, h4 {
+  text-align: center;
+  color: blue;
+  font-weight: bold;
+}
+```
+
+## Introduction 
+The central theme of this project will be to assess the impact of activity level on body temperature across various human subjects. This project specifically will examine how our body temperature differs during extended periods of rest and exercise in order to make a conclusion about how activity directly impacts our body temperature. As seen in Weinert's study, there is a very strong correlation between body temperature and increased locomotor activity in mice. In this study, researchers implanted transmitters into mice to record their body temperature and activity levels in continuous 24 hour periods over 2 or 4 weeks and quantified this relationship through regression analysis. Based on this study, and the fact that both mice and humans are mammals with similar body temperature regulation techniques, we hypothesize that we will see increases in body temperature correlate strongly with increases in activity in humans.
+
+
+
+
+## Methods
+To measure the body temperature of our human subjects, we  programmed an Arduino Uno unit (using the code provided in the module 5 project outline) to measure and store  temperature data to be obtained using a DHT11 sensor attached to the unit. Then, each group member had their temperature measured over 100 seconds while sitting on the couch, and then over 100 seconds after 5 minutes of jumping jacks. This data was then separately analyzed to create a table summarizing the mean temperature for each group member during each activity plus or minus 1 standard deviation. 
+
+
+## Results and Plots
+```{r, echo=FALSE, message = FALSE, fig.align ='center', fig.cap= "Fig1: Figure 1 depits a box plot for body temperature data of all group members performed while at rest and after one minute of activity (sitting on couch and one minute of jumping jacks). Means are denoted by black dot."}
+dat.f <- list.files(pattern = "Couch|Active.csv")
+
+dat.l <- list() 
+
+for(i in dat.f){
+  met.dat<- unlist(strsplit(i,"_")) 
+  who <- met.dat[1] 
+  activity <- gsub(".csv","",met.dat[2]) 
+  dat.l[[i]]<- read_csv(i)%>%
+    mutate(who=who,activity=activity) %>%
+    group_by(who, activity) %>% 
+    mutate(mean = mean(degC))
+}
+dat <- do.call(rbind,dat.l) 
+
+dat%>%
+  ggplot(aes(x=activity,y=degC))+geom_boxplot()+stat_summary(fun = "mean", geom = "point", shape = 20, size = 4, fill = "white")+facet_grid(.~who) 
+```
+
+
+
+
+## Discussion
+Write discussion here
+
+
+
+## Contributions
+Chris Peters: Assembling arduino sketch and hardware, setting up and formatting markdown code, creating the code for the plot
+Joe: Found study about the effect of activity on body temperature in mice, wrote the introduction, methods, and results sections.
+Karim:
+Brianna
+
+
+
+## References
+Write references here or bib? i think

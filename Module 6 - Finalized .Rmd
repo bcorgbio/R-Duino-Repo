@@ -1,45 +1,27 @@
 ---
-title: "Module 6 Report"
+title: "Mod6"
 author: "R-Duino - Chris, Joe, Karim, Brianna"
 date: "11/6/2022"
 output: html_document
-bibliography: BIOL3140_RDuino_mod6.bib
+bibliography: 
 ---
+
+<!-- for comments -->
+<style>
+div.comment pre { background-color:#ffbbbb; }
+div.comment pre.r { background-color:#ffbbbb; }
+div.comment {color: red;}
+</style>
+
 ## Introduction
-The Lepidoptera can be found in almost every terrestrial ecosystem playing a fundamental role. Inside of this extremely important order of insects, there are 160,000 described extant species with a wide variety of paired wing mechanisms. Despite this variety and the different selective pressures that each species inhabits, each member of this family has pairs of hindwings and forewings with unique roles in powered flight. Studies in the past have investigated the specific role of the hindwing and the forewing during flight on the species level. For example, @jantzen2008hindwings found that butterflies can fly without hindwings, but suffer speed and maneuverability issues. Despite the importance of studies like Jantzen and Eisner’s, they are limited in their ability to assess shape variables and ecological roles of the fore- and hindwings over evolutionary timescales and across lineages/species. Comparative studies have also been used to asses the patterns of fore- and hindwing shape across the Lepidoptera. For example, @strauss1990patterns found that in heliconiine and ithomiine butterflies, the shape of hindwings is much more variable than the shape of forewings. Again, although this study, and studies like it, are important in their own right, they do not answer if shape differs consistently across the Lepidoptera due to their limited phylogenetic scope (each study only encompasses a few species spanning a few families of butterflies). The goal of this study is to assess wing-shape evolution across the Lepidoptera, including hundreds of species of moths and butterflies. This will be done by characterizing the shape outline of fore- and hindwings from about 200 species of Lepidoptera to answer the following questions:
 
-1. Do hind- and forewings vary in their evolutionary rates?
-2. Does the evolvability of the hind- and forewings vary significantly among major lineages of moths and butterflies?
-3. Is hindwing and forewing shape correlated?
-
+<div class="comment">
+Excellent intro!
+</div>
 
 
 ## Methods
 
-### Preparing our Data to Answer our Questions
-
-#### Image Acquisition
- In order to amass a large data set of morphometric data for both moths and butterflies, a dataset obtained from the Global Biodiversity Information Facility (GBIF) was used. This dataset can easily be accessed by using the R package rgif, which permits access to the GBIF’s application programming interface (API), rendering there morphological records searchable from the command line. 
-
-#### Species List and Phylogeny
-This project will be comparing wing shape across species of the Lepidotera, making it a comparative study. As a result, we used the phylogeny developed by @kawahara2019phylogenomics to base our results.
-
-#### Digitization
-In order to conduct shape analysis, the right hind- and forewings from images of ~200 species of Lepidoptera were digitized using the image analysis software FIJI (FIJI is just imageJ). For each species with more than 3 samples present, the best images were selected for analysis (images containing a scale bar,  with the least damage to wings and the most exposed hindwing). If less than 3 images were available for a given sample then all images were digitized. In order to digitize the wing, first the image scale was set The Image scale was set in millimeters. Next, the right fore- or hindwing was outlined using the FIJI polygon selection tool starting from the anterior margin of the wing where it meets the thorax. Lastly, a macro was run to fit a spline through the points selected by the polygon selection tool and produce a list of x, y coordinates, characterizing the outline of the wing. The list of x, y coordinates was saved as a .txt file for further analysis.
-
-#### Shape Analysis
-Outline analysis was used to compare the change in wing shape across species. For our purposes, elliptical Fourier analysis (EFA) was used. In order to analyze the EFA output and determine the source of the important variance between wing shapes in less variables, Principal Componenets Analysis (PCA) was used. EFA and PCA analysis was done using commands from the Momocs package in R and joining of data matrices from the Momocs package was preformed using the vroom() command from the vroom package.
-
-### Analyzing our Data To Answer our Questions
-
-#### Do Hindwings and Forewings Vary in their Evolutionary Rates?
-
-1. Comparative Analysis: To assess the evolutionary rates of hind- and forewings, we evaluated the evolutionary rates of our PC scores for the hind- and fore wings.
-2.
-
-#### Does the evolvability of the hind- and forewings vary significantly among major lineages of moths and butterflies?
-
-#### Is hindwing and forewing shape correlated?
 
 
 ## Results and Plots
@@ -237,7 +219,7 @@ names(fore.pc2) <-  forewing.pca2 %>%
 ```
 
 
-## Results
+### Results
 
 #### Evolutionary Rates of Hindwing and Forewing
 
@@ -357,31 +339,12 @@ forePC2.res$plot
 forePC2.res$res
 ```
 
-### Shape Evolution Correlation
-
-```{r, echo=FALSE, message = FALSE, fig.align ='center'}
-hindPC1.pic <- pic(hind.pc1,phy = lep.tree2)
-forePC1.pic <- pic(fore.pc1,phy = lep.tree2)
-PC1.pic <- tibble(
-  hind=hindPC1.pic,
-  fore=forePC1.pic
-)
-PC1.pic %>% 
-  ggplot(aes(x=fore,y=hind))+geom_point()+geom_smooth(method="lm")
-summary(lm(hind~fore,PC1.pic))
-```
-
 
 ## Discussion
-Wing shape appears to be generally conserved in their respective groups, as the only exceptional values observed result from low evolutionary shifts. The group Papilionoidea experienced astonishingly low rates of phenotypic variation according to PC2. The lack of variation in PC2 indicates that the span of the wings relative to the body in Papilionoidea is highly conserved. As indicated by previous authors, it is difficult to determine the cause of the purifying selection without examining each species' respective niche @le2019adaptive. Based upon the common physiological features of Papilionoidea, it can be inferred that fore- and hindwing span may be conserved as it is important in both hovering and predatory defense. The forewing aspect ratio, indicated by PC1 appears to be conserved in many groups including Pyraloidea, Noctuoidea, and many others. This result is expected considering the forewing was discovered to be the major contributor to flight @jantzen2008hindwings. The group Noctuoida was shown to experience low rates of evolution in aspect ratio for both the fore- and hind wings. This phenomenon indicates that flight mechanics are likely very important for the survival of species within Noctuidae. Based on a study conducted on groups Papilionoidea and Hesperioidea, researchers discovered “short, broad (low AR) wings would favour slow, agile flight” and “ long, slender  (high AR) wings would be associated with species that fly extensively,” where AR stands for aspect ratio @betts1988wing. These researchers demonstrated that aspect ratio plays an immense role in determining wing loading, which essentially can be used to describe flight mechanics. By complementing the data presented in this study with previous research, predictions can be made on the evolution of wing shape based on ecological constraints. Migratory groups or species, such as monarchs, likely have a high aspect ratio, while groups that evolved under frequent predation would likely have a low aspect ratio to swiftly evade predators.
+
 
 
 ## Contributions
-Chris: Outlines for himself and Brianna, Porting over and cleaning up of code from class
-Joe: Outlines, Fixing of code, Introduction, Methods, and  Bibliography
-Karim:
-Briana:
+
 
 ## References
-
-

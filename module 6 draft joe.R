@@ -277,6 +277,10 @@ hindPC1.res <- plot_SS(lep.tree2,hindPC1.SS,tax = tax.names)
 
 hindPC1.res$plot
 
+forePC1.res <- plot_SS(lep.tree2,forePC1.SS,tax = tax.names)
+
+forePC1.res$plot
+
 hindPC1.res$res
 
 #Shape evolution correlation
