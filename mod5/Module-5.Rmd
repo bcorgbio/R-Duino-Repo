@@ -1,0 +1,66 @@
+---
+title: "Module 5 Report"
+author: "R-Duino - Chris, Joe, Karim, Brianna"
+date: "10/14/2022"
+output: html_document
+bibliography: r_duino_bib.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+```{css, echo=FALSE}
+h1, h4 {
+  text-align: center;
+  color: blue;
+  font-weight: bold;
+}
+```
+
+## Introduction 
+The goal of this project will be to assess the impact of activity level on body temperature across various human subjects. Prior research showed that gastrointestinal temperature increased by a few degrees Celsius with activity due to the conversion of mechanical energy to heat during exercise [@lim2008human]. This increase rarely ever exceeded 1 or 2 degrees Celsius because of thermoregulation. We hypothesize that we will see that an increase in activity correlates with a slight increase in body temperature in humans, as endotherms employ many thermoregulatory mechanisms to maintain homeostasis. 
+
+1. Item 1: I
+2. Item 2: love
+
+## Methods
+To measure the body temperature of our human subjects, we  programmed an Arduino Uno unit (using the code provided in the module 5 project outline) to measure and store  temperature data to be obtained using a DHT11 sensor attached to the unit. Then, each group member had their temperature measured over 100 seconds while sitting on the couch, and then over 100 seconds after 5 minutes of jumping jacks. This data was then separately analyzed to create a table summarizing the mean temperature for each group member during each activity plus or minus 1 standard deviation. 
+
+
+
+## Results and Discussion
+```{r, echo=FALSE, message = FALSE, fig.align ='center', fig.cap= "Fig1: Figure 1 depits a box plot for body temperature data of all group members performed while at rest and after one minute of activity (sitting on couch and one minute of jumping jacks). Means are denoted by black dot."}
+dat.f <- list.files(pattern = "Couch|Active.csv")
+
+dat.l <- list() 
+
+for(i in dat.f){
+  met.dat<- unlist(strsplit(i,"_")) 
+  who <- met.dat[1] 
+  activity <- gsub(".csv","",met.dat[2]) 
+  dat.l[[i]]<- read_csv(i)%>%
+    mutate(who=who,activity=activity) %>%
+    group_by(who, activity) %>% 
+    mutate(mean = mean(degC))
+}
+dat <- do.call(rbind,dat.l) 
+
+dat%>%
+  ggplot(aes(x=activity,y=degC))+geom_boxplot()+stat_summary(fun = "mean", geom = "point", shape = 20, size = 4, fill = "white")+facet_grid(.~who) 
+```
+
+The comparison of the data allows us to determine that activity level and body temperature do seem to have an impact on one another. Based on the information presented in the box plot above, it appears that increased activity did correlate with increased body temperature, as seen with Joe, Chris, and Karim's data. Although Brianna's data does not show that activity correlated with an increase in body temperature, errors in the experimental procedure or with the way the temperature was obtained could have caused there to be no noticeable increase. Additionally, differences in physical fitness and exertion could have caused there to be no noticeable increase in body temperature for her. Based on our findings, we can conclude that body temperature and activity level exhibit a strong positive correlation with each other in humans. This finding is congruent with previous findings, as seen with the work from Chin Leong Lim.
+
+
+
+## Contributions
+Chris Peters: Assembling arduino sketch and hardware, setting up and formatting markdown code, creating the code for the plot
+Joe:Found study about the effect of activity on body temperature in mice, wrote the introduction, methods,  results and discussion sections.
+Karim: General rmd formatting, put together bibliography, and editing for the discussion & intro.
+Brianna
+
+
+
+## References
+
