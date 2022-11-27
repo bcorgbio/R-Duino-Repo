@@ -1,0 +1,155 @@
+---
+title: "Module 7"
+author: "Chris, Joe, Karim"
+date: "11/27/2022"
+output: html_document
+---
+
+### Introduction
+
+
+
+### Methods
+
+
+
+### Results
+
+```{r,include=FALSE}
+library(tidyverse)
+library(MuMIn)
+library(geiger)
+library(knitr)
+```
+
+```{css, echo=FALSE}
+h1, h4 {
+  text-align: center;
+  color: green;
+  font-weight: bold;
+}
+```
+
+<center>
+```{r,include=FALSE}
+#compiling metadata
+f<- list.files("Project 8 data",full.names = T)
+f.l <- list()
+angs<- seq(45,168.75,length.out = 12)
+for(i in f){
+  f.i<-read_delim(i,delim = " ",show_col_types = FALSE, col_names = c("Reading","Force","Unit"))
+  m <- unlist(strsplit(i,"_"))
+  subject<-m[2]
+  angle<-(angs[which.min(abs(angs-as.numeric(m[3])))])
+  experiment<-gsub("\\..+","",m[4])
+  f.l[[i]]<-f.i%>%
+    mutate(subject=subject,angle=angle,experiment=experiment,)
+}
+dat<-do.call(rbind,f.l)
+```
+```{r,include=FALSE}
+#finding max of each recording
+dat_recording_max<-dat%>%
+  group_by(subject,angle,experiment)%>%
+  summarize(recording_max=max(abs(Force)))%>%
+  print()
+#finding max of each experiment
+dat_Fmax<-dat_recording_max%>%
+  group_by(subject,experiment)%>%
+  summarize(Fmax=max(recording_max))%>%
+  print()
+#normalizing the max values
+dat_Fmax_norm<-dat_recording_max%>%
+    left_join(dat_Fmax)
+dat_Fmax_norm<-dat_Fmax_norm%>%
+  group_by(angle,subject,experiment)%>%
+  summarize(Fmax_norm=(recording_max/Fmax))%>%
+  print()
+```
+```{r,fig.cap="Figure 1. Normalized Fmax Values vs. Angle", echo=FALSE}
+#plot of normalized maxes by experiment
+dat_Fmax_norm%>%
+  ggplot(aes(x=angle,y=Fmax_norm,col=experiment))+geom_point()
+```
+```{r,include=FALSE}
+#Do class-wide force-angle data for isometric MVC accord to a typical FL relationship both under control and fatigued conditions?
+dat_Fmax_norm_mean<-dat_Fmax_norm%>%
+  group_by(angle,experiment)%>%
+  summarize(Fmax_norm_mean=mean(Fmax_norm))
+```
+```{r,fig.cap="Figure 2. Mean Normalized Fmax vs. Angle", echo=FALSE}
+#plot of means of normalized Fmax for each angle and experiment
+dat_Fmax_norm_mean%>%
+  ggplot(aes(x=angle,y=Fmax_norm_mean,col=experiment))+geom_point()+labs(y="Mean Normalized Fmax", x="Angle")
+```
+```{r,include=FALSE}
+#time to model
+poly.m2 <- lm(Fmax_norm~poly(angle,2),data=dat_Fmax_norm) #second order
+poly.m3 <- lm(Fmax_norm~poly(angle,3),data=dat_Fmax_norm) #third order
+poly.m4 <- lm(Fmax_norm~poly(angle,4),data=dat_Fmax_norm) #fourth order
+#which model fits best for each experimental condition for each subject
+poly.aic<-AICc(poly.m2,poly.m3,poly.m4) 
+print(poly.aic) #2nd order, poly.m2, has the best fit
+AICs <- dat_Fmax_norm%>%
+  group_by(subject,experiment)%>%
+  summarize(
+    m2=AICc(lm(Fmax_norm~poly(angle,2))), #second order
+    m3=AICc(lm(Fmax_norm~poly(angle,3))), #third order
+    m4=AICc(lm(Fmax_norm~poly(angle,4))) #fourth order
+  )%>%
+  pivot_longer(m2:m4,names_to="model",values_to="AICc")%>%
+  print()
+```
+```{r,include=FALSE}
+#predicting values based on best fitting model for 1000 angles
+x.pred<-seq(45,157.5,length.out=1000)
+fits <- dat_Fmax_norm%>%
+  group_by(subject,experiment)%>%
+  summarize(
+    m2=predict(lm(Fmax_norm~poly(angle,2)),newdata=data.frame(angle=x.pred)), #second order
+    m3=predict(lm(Fmax_norm~poly(angle,3)),newdata=data.frame(angle=x.pred)), #third order
+    m4=predict(lm(Fmax_norm~poly(angle,4)),newdata=data.frame(angle=x.pred)) #fourth order
+  )%>%
+  pivot_longer(m2:m4,names_to="model")%>%
+  group_by(subject,experiment,model)%>%
+  summarize(theta_max=x.pred[which.max(value)])%>%
+  print()
+#combining AICs and fits
+best.models<-fits%>%
+  left_join(AICs)%>%
+  group_by(subject,experiment)%>%
+  mutate(best=AICc==min(AICc))%>%
+  filter(best==TRUE)%>%
+  select(-best)%>%
+  print()
+```
+```{r,include=FALSE}
+#Is there a significant difference between control and fatigue theta_max? 
+anova_thetamax<-anova(lm(theta_max~experiment,best.models))
+```
+```{r, echo=FALSE}
+kable(anova_thetamax,caption="Table 1. Anova of Theta Max")
+```
+```{r,include=FALSE}
+#Finding mean and SEM of shift in theta_max
+theta_max<-best.models%>%
+  pivot_wider(id_cols=subject,names_from = experiment,values_from=theta_max)%>%
+  mutate(shift=fatigue-control)%>%
+  ungroup()%>%
+  summarize(mean.shift=mean(shift,na.rm=TRUE),se.shift=sd(shift,na.rm=TRUE)/sqrt(length(shift)))
+```
+```{r, echo=FALSE}
+kable(theta_max,caption="Table 2.Mean and SEM Theta Max ")
+```
+
+
+### Discussion
+
+
+
+### Author Contributions
+
+
+
+
+
