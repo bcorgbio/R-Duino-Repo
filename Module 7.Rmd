@@ -3,9 +3,13 @@ title: "Module 7"
 author: "Chris, Joe, Karim"
 date: "11/27/2022"
 output: html_document
+bibliography: BIOL3140_RDuino_mod7.bib
 ---
 
 ### Introduction
+
+In this project we will be exploring the effect of length on muscle force generation and how fatigue impacts this force-length (FL) relationship. The question of how fatigue influences the FL relationship has been asked for a while in animal models. Many past studies have hope to analyze the impact of fatigue on the FL relationship in rats, with many finding that fatigue cause a sizable shift towards longer muscle length at which the maximal force occurs. Other studies, like that of @macnaughton2006reports in 2006, found that this right-wards shift towards longer length at maximum force generation is overexaggerated, leading to some contention about the exact increase size of the shift. As a result of this uncertainty in the field, our study hopes to show another example of how the FL relationship is influence by fatigue in an attempt to provide more certainty around how sizable the shift actually is. In addition, our study hopes to provide more context on how fatigue impacts the FL relationship of the human upper limb specifically in humans, as the literature does not appear to have much information in this area. This study will prove to be important as we seek to gain a better understanding of our muscles and how fatigue impacts the amount of actin-myosin overlap, and thereby the isometric force created, at each point in our contraction.
+	In order to assess the force length relationship of the upper human limb in our study, we will be making the assumption that the force we measure at our hand as the muscle produces isometric force at various lengths is a reasonable reflection of the FL relationship government force at the fiber level, based on previous work by @rassier1999length. Additionally, because the human upper limb is essentially a 3rd order lever (muscles on either side of the arm span the elbow joint), we will be using the mechanical advantage equation to predict the amount of output force created by the human upper limb based on the output force present on the human palm at the point of exertion. Our investigation will be broken up into three parts. First, we will produce the isometric force-angle curves for the human forearm flexors undertaking the maximum voluntary contractions (MVCs). Second, we will compare the angle at which the maximum isometric force occurs between non-fatigues and eccentrically fatigues forearm flexors. Third, we will investigate the underlying mechanisms resulting in a shift of the angle at which maximum isometric force occurs after eccentric fatigue.
 
 
 
