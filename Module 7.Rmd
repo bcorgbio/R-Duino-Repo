@@ -28,6 +28,7 @@ Before starting our analysis, we normalized the force data for each recording to
 library(tidyverse)
 library(MuMIn)
 library(knitr)
+library(dplyr)
 ```
 
 ```{css, echo=FALSE}
@@ -128,7 +129,7 @@ best.models<-fits%>%
   group_by(Subject,Experiment)%>%
   mutate(best=AICc==min(AICc))%>%
   filter(best==TRUE)%>%
-  select(-best)
+  dplyr::select(-best)
 ```
 
 ```{r,include=FALSE}
