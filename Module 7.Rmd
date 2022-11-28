@@ -132,6 +132,8 @@ best.models<-fits%>%
   dplyr::select(-best)
 ```
 
+Both figures depict the data collected with force plotted against the forearm angle where force was expressed as a ratio of the maximum value for each subject. The figures depict a larger angle where maximal force was observed for the fatigued trials.
+
 ```{r,include=FALSE}
 #Determining significance in the difference between control and fatigue theta_max? 
 anova_thetamax<-anova(lm(theta_max~Experiment,best.models))
@@ -139,6 +141,8 @@ anova_thetamax<-anova(lm(theta_max~Experiment,best.models))
 ```{r, echo=FALSE}
 kable(anova_thetamax,caption="Table 1. Anova for Theta Max")
 ```
+
+Table 1 depicts the significance in the difference between the theta max in control and fatigue trials. 
 
 ```{r,include=FALSE}
 #Mean and SEM values for shift in theta_max
@@ -151,19 +155,19 @@ theta_max<-best.models%>%
 ```{r, echo=FALSE}
 kable(theta_max,caption="Table 2. Mean and SEM Values for Theta Max ")
 ```
-Both figures depict the data collected with force plotted against the forearm angle where force was expressed as a ratio of the maximum value for each subject. The figures depict a larger angle where maximal force was observed for the fatigued trials.
 
 ### Discussion
 
-The collected data demonstrates a shift in the peak force relationship towards larger elbow-forearm angles. This finding can be visualized by figure 2. above, where the fatigued muscle (in blue) achieves a maximal value further to the right of the control. The average shift in the maximal angle of force was to an angle 8.36° larger. This conclusion coincides with prior research done highlighted by @macnaughton2006reports. There does appear to be some discrepancy within the data, as the force reaches a local maximum around 112° for the control, but then climbs higher at roughly 130°. Theoretically, this phenomenon should not occur, as force should peak at an intermediate length. The observation of a lone peak between around 110° was expected, but not observed. The increase in force at higher angles was likely caused by the activation of chest and shoulder fibers as the arm straightened. The involvement of chest and shoulder muscles was unavoidable, as the participants had to pull vertically up to record force output. This direction of force output would encourage the use of additional muscle groups, explaining why the force did not peak at the expected range. In future trials, the experiment should be performed against a horizontal surface to isolate the bicep and observe an expected peak. Therefore, the local maximum observed at around 112° for the control and 125° for the experimental likely reflect the true peak for the bicep alone. Regardless of the involvement of other muscles, the maximal force produced when fatigued was shown to take place at greater angles.
+The collected data demonstrates a shift in the peak force relationship towards larger elbow-forearm angles. This finding can be visualized in figure 2. above, where the fatigued muscle (in blue) achieves a maximal value further to the right of the control. The average shift in the maximal angle of force, or theta max, was to an angle 8.36° larger. This conclusion coincides with prior research highlighted by @macnaughton2006reports. There does appear to be some discrepancy within the data, as the force reaches a local maximum around 112° for the control, but then climbs higher at roughly 130°. Theoretically, this phenomenon should not occur, as force should peak at an intermediate length. The observation of a lone peak between around 110° was expected, but not observed. The increase in force at higher angles was likely caused by the activation of chest and shoulder fibers as the arm straightened. The involvement of chest and shoulder muscles was unavoidable, as the participants had to pull vertically up to record force output. This direction of force output would encourage the use of additional muscle groups, explaining why the force did not peak at the expected range. In future trials, the experiment should be performed against a horizontal surface to isolate the bicep and observe an expected peak. Therefore, the local maximum observed at around 112° for the control and 125° for the experimental likely reflect the true peak for the bicep alone. Regardless of the involvement of other muscles, the maximal force produced when fatigued was shown to take place at greater angles.
 
 ### Author Contributions
 Karim: Worked on the discussion and results.
 
 Chris: Worked on the code and graphs.
 
-Joe: Worked on the graphs, intro, and methods
+Joe: Worked on the graphs, intro, and methods.
 
 
-###References
+### References
+
 
