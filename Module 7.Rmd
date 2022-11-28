@@ -16,10 +16,10 @@ In this project we will be exploring the effect of length on muscle force genera
 ### Methods
 
 #### Data Collection
-In order to obtain force data for our FL relationship analysis, we created an Arduino-based force-data acquisition system (DAQ) using an Arduino Tension Scale with 40 kg Luggage Load Cell and HX711 Amplifier from Autodesk Instructables. Additionally, we constructed a ganiometer to measure the angle between the upper and lower arm (ie. the elbow angle) to serve as a measure of length. During data collection, we started by taping the ganiometer to the subject’s elbow. Next, we affixed one hook of the load cell present on our DAQ pack to a dowel for the subject to hold and the other end to something that would not move under the torque of the subjects forearm (more specifically on the side of a step in the staircase of Chris’s mod). Additionally, we positioned a group member behind each test subject  so that they could support the subjects elbow with their palm in order to ensure that there was no variation from the angle measured by the ganiometer. Next, we collected isometric force data over 12 arm angles in 11.25$^\circ$ intervals from 45$^\circ$ to 157.5$^\circ$, with subjects being instructed to flex their elbow as “hard as they could” at each angle to produce the non-fatigued MVC. After obtaining the non-fatigued (control) data, we had our subjects curl a wooden chair until failure to fatigue the upper limb muscles. After this, we obtained our subjects isometric force data at each of the same angles as the non-fatigue trials to obtain our fatigue data. 
+In order to obtain force data for our FL relationship analysis, we created an Arduino-based force-data acquisition system (DAQ) using an Arduino Tension Scale with 40 kg Luggage Load Cell and HX711 Amplifier from Autodesk Instructables. Additionally, we constructed a ganiometer to measure the angle between the upper and lower arm (ie. the elbow angle) to serve as a measure of length. During data collection, we started by taping the ganiometer to the Subject’s elbow. Next, we affixed one hook of the load cell present on our DAQ pack to a dowel for the Subject to hold and the other end to something that would not move under the torque of the Subjects forearm (more specifically on the side of a step in the staircase of Chris’s mod). Additionally, we positioned a group member behind each test Subject  so that they could support the Subjects elbow with their palm in order to ensure that there was no variation from the angle measured by the ganiometer. Next, we collected isometric force data over 12 arm angles in 11.25$^\circ$ intervals from 45$^\circ$ to 157.5$^\circ$, with Subjects being instructed to flex their elbow as “hard as they could” at each angle to produce the non-fatigued MVC. After obtaining the non-fatigued (control) data, we had our Subjects curl a wooden chair until failure to fatigue the upper limb muscles. After this, we obtained our Subjects isometric force data at each of the same angles as the non-fatigue trials to obtain our fatigue data. 
 
 #### Data Analysis
-Before starting our analysis, we normalized the force data for each recording to ensure that any unit discrepancies between recordings did not impact our results. We did this by finding the maximum force for each recording for each individual and dividing the other force values in the recording by the maximum value (now forces are on a scale of 0-1, with a value of 1 representing the maximum force). After we normalized our data, we compiled it and used a 4th order polynomial model to produce isometric force-angle curves for each subject (fatigued and non-fatigued). Next, we used the fatigued and non-fatigued curve for each subject to detect shifts in the maximum force with respect to angle. Finally, we used script written in R to calculate the mean shift between fatigued and non-fatigued across all trials.
+Before starting our analysis, we normalized the force data for each recording to ensure that any unit discrepancies between recordings did not impact our results. We did this by finding the maximum force for each recording for each individual and dividing the other force values in the recording by the maximum value (now forces are on a scale of 0-1, with a value of 1 representing the maximum force). After we normalized our data, we compiled it and used a 4th order polynomial model to produce isometric force-angle curves for each Subject (fatigued and non-fatigued). Next, we used the fatigued and non-fatigued curve for each Subject to detect shifts in the maximum force with respect to angle. Finally, we used script written in R to calculate the mean shift between fatigued and non-fatigued across all trials.
 
 
 ### Results
@@ -47,28 +47,28 @@ angs<- seq(45,168.75,length.out = 12)
 for(i in f){
   f.i<-read_delim(i,delim = " ",show_col_types = FALSE, col_names = c("Reading","Force","Unit"))
   m <- unlist(strsplit(i,"_"))
-  subject<-m[2]
+  Subject<-m[2]
   Angle<-(angs[which.min(abs(angs-as.numeric(m[3])))])
   Experiment<-gsub("\\..+","",m[4])
   f.l[[i]]<-f.i%>%
-    mutate(subject=subject,Angle=Angle,Experiment=Experiment,)}
+    mutate(Subject=Subject,Angle=Angle,Experiment=Experiment,)}
 dat<-do.call(rbind,f.l)
 
 #Max for each recording
 dat_recording_max<-dat%>%
-  group_by(subject,Angle,Experiment)%>%
+  group_by(Subject,Angle,Experiment)%>%
   summarize(recording_max=max(abs(Force)))
 
 #Max for each Experiment
 dat_Fmax<-dat_recording_max%>%
-  group_by(subject,Experiment)%>%
+  group_by(Subject,Experiment)%>%
   summarize(Fmax=max(recording_max))
 
 #Normalizing maxes
 dat_Fmax_norm<-dat_recording_max%>%
     left_join(dat_Fmax)
 dat_Fmax_norm<-dat_Fmax_norm%>%
-  group_by(Angle,subject,Experiment)%>%
+  group_by(Angle,Subject,Experiment)%>%
   summarize(Fmax_norm=(recording_max/Fmax))
 ```
 
@@ -100,7 +100,7 @@ poly.m4 <- lm(Fmax_norm~poly(Angle,4),data=dat_Fmax_norm) #4th
 poly.aic<-AICc(poly.m2,poly.m3,poly.m4) 
 print(poly.aic) #2nd order as best fit
 AICs <- dat_Fmax_norm%>%
-  group_by(subject,Experiment)%>%
+  group_by(Subject,Experiment)%>%
   summarize(
     m2=AICc(lm(Fmax_norm~poly(Angle,2))),
     m3=AICc(lm(Fmax_norm~poly(Angle,3))),
@@ -112,20 +112,20 @@ AICs <- dat_Fmax_norm%>%
 #Fitting Model to predicted values for 1000 angles
 x.pred<-seq(45,157.5,length.out=1000)
 fits <- dat_Fmax_norm%>%
-  group_by(subject,Experiment)%>%
+  group_by(Subject,Experiment)%>%
   summarize(
     m2=predict(lm(Fmax_norm~poly(Angle,2)),newdata=data.frame(Angle=x.pred)), #2nd 
     m3=predict(lm(Fmax_norm~poly(Angle,3)),newdata=data.frame(Angle=x.pred)), #3rd 
     m4=predict(lm(Fmax_norm~poly(Angle,4)),newdata=data.frame(Angle=x.pred)) #4th 
   )%>%
   pivot_longer(m2:m4,names_to="model")%>%
-  group_by(subject,Experiment,model)%>%
+  group_by(Subject,Experiment,model)%>%
   summarize(theta_max=x.pred[which.max(value)])
 
 #Combining AIC and fit models
 best.models<-fits%>%
   left_join(AICs)%>%
-  group_by(subject,Experiment)%>%
+  group_by(Subject,Experiment)%>%
   mutate(best=AICc==min(AICc))%>%
   filter(best==TRUE)%>%
   select(-best)
@@ -142,7 +142,7 @@ kable(anova_thetamax,caption="Table 1. Anova for Theta Max")
 ```{r,include=FALSE}
 #Mean and SEM values for shift in theta_max
 theta_max<-best.models%>%
-  pivot_wider(id_cols=subject,names_from = Experiment,values_from=theta_max)%>%
+  pivot_wider(id_cols=Subject,names_from = Experiment,values_from=theta_max)%>%
   mutate(shift=fatigue-control)%>%
   ungroup()%>%
   summarize(mean.shift=mean(shift,na.rm=TRUE),se.shift=sd(shift,na.rm=TRUE)/sqrt(length(shift)))
