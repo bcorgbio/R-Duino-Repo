@@ -1,0 +1,181 @@
+---
+title: "Module 7"
+author: "Chris, Joe, Karim"
+date: "11/27/2022"
+output: html_document
+bibliography: BIOL3140_RDuino_mod7.bib
+---
+
+### Introduction
+
+In this project we will be exploring the effect of length on muscle force generation and how fatigue impacts this force-length (FL) relationship. The question of how fatigue influences the FL relationship has been asked for a while in animal models. Many past studies have hope to analyze the impact of fatigue on the FL relationship in rats, with many finding that fatigue cause a sizable shift towards longer muscle length at which the maximal force occurs. Other studies, like that of @macnaughton2006reports in 2006, found that this right-wards shift towards longer length at maximum force generation is overexaggerated, leading to some contention about the exact increase size of the shift. As a result of this uncertainty in the field, our study hopes to show another example of how the FL relationship is influence by fatigue in an attempt to provide more certainty around how sizable the shift actually is. In addition, our study hopes to provide more context on how fatigue impacts the FL relationship of the human upper limb specifically in humans, as the literature does not appear to have much information in this area. This study will prove to be important as we seek to gain a better understanding of our muscles and how fatigue impacts the amount of actin-myosin overlap, and thereby the isometric force created, at each point in our contraction.
+	
+	
+In order to assess the force length relationship of the upper human limb in our study, we will be making the assumption that the force we measure at our hand as the muscle produces isometric force at various lengths is a reasonable reflection of the FL relationship government force at the fiber level, based on previous work by @rassier1999length. Additionally, because the human upper limb is essentially a 3rd order lever (muscles on either side of the arm span the elbow joint), we will be using the mechanical advantage equation to predict the amount of output force created by the human upper limb based on the output force present on the human palm at the point of exertion. Our investigation will be broken up into three parts. First, we will produce the isometric force-angle curves for the human forearm flexors undertaking the maximum voluntary contractions (MVCs). Second, we will compare the angle at which the maximum isometric force occurs between non-fatigues and eccentrically fatigues forearm flexors. Third, we will investigate the underlying mechanisms resulting in a shift of the angle at which maximum isometric force occurs after eccentric fatigue.
+
+
+
+### Methods
+
+#### Data Collection
+In order to obtain force data for our FL relationship analysis, we created an Arduino-based force-data acquisition system (DAQ) using an Arduino Tension Scale with 40 kg Luggage Load Cell and HX711 Amplifier from Autodesk Instructables. Additionally, we constructed a ganiometer to measure the angle between the upper and lower arm (ie. the elbow angle) to serve as a measure of length. During data collection, we started by taping the ganiometer to the Subject’s elbow. Next, we affixed one hook of the load cell present on our DAQ pack to a dowel for the Subject to hold and the other end to something that would not move under the torque of the Subjects forearm (more specifically on the side of a step in the staircase of Chris’s mod). Additionally, we positioned a group member behind each test Subject  so that they could support the Subjects elbow with their palm in order to ensure that there was no variation from the angle measured by the ganiometer. Next, we collected isometric force data over 12 arm angles in 11.25$^\circ$ intervals from 45$^\circ$ to 157.5$^\circ$, with Subjects being instructed to flex their elbow as “hard as they could” at each angle to produce the non-fatigued MVC. After obtaining the non-fatigued (control) data, we had our Subjects curl a wooden chair until failure to fatigue the upper limb muscles. After this, we obtained our Subjects isometric force data at each of the same angles as the non-fatigue trials to obtain our fatigue data. 
+
+#### Data Analysis
+Before starting our analysis, we normalized the force data for each recording to ensure that any unit discrepancies between recordings did not impact our results. We did this by finding the maximum force for each recording for each individual and dividing the other force values in the recording by the maximum value (now forces are on a scale of 0-1, with a value of 1 representing the maximum force). After we normalized our data, we compiled it and used a 4th order polynomial model to produce isometric force-angle curves for each Subject (fatigued and non-fatigued). Next, we used the fatigued and non-fatigued curve for each Subject to detect shifts in the maximum force with respect to angle. Finally, we used script written in R to calculate the mean shift between fatigued and non-fatigued across all trials.
+
+
+### Results
+
+```{r,include=FALSE}
+library(tidyverse)
+library(MuMIn)
+library(knitr)
+library(dplyr)
+```
+
+```{css, echo=FALSE}
+h1, h4 {
+  text-align: center;
+  color: green;
+  font-weight: bold;
+}
+```
+
+<center>
+```{r,include=FALSE}
+#loading data
+f<- list.files("Project 8 data",full.names = T)
+f.l <- list()
+angs<- seq(45,168.75,length.out = 12)
+for(i in f){
+  f.i<-read_delim(i,delim = " ",show_col_types = FALSE, col_names = c("Reading","Force","Unit"),progress=FALSE)
+  m <- unlist(strsplit(i,"_"))
+  Subject<-m[2]
+  Angle<-(angs[which.min(abs(angs-as.numeric(m[3])))])
+  Experiment<-gsub("\\..+","",m[4])
+  f.l[[i]]<-f.i%>%
+    mutate(Subject=Subject,Angle=Angle,Experiment=Experiment,)}
+dat<-do.call(rbind,f.l)
+
+#Max for each recording
+dat_recording_max<-dat%>%
+  group_by(Subject,Angle,Experiment)%>%
+  summarize(recording_max=max(abs(Force)))
+
+#Max for each Experiment
+dat_Fmax<-dat_recording_max%>%
+  group_by(Subject,Experiment)%>%
+  summarize(Fmax=max(recording_max))
+
+#Normalizing maxes
+dat_Fmax_norm<-dat_recording_max%>%
+    left_join(dat_Fmax)
+dat_Fmax_norm<-dat_Fmax_norm%>%
+  group_by(Angle,Subject,Experiment)%>%
+  summarize(Fmax_norm=(recording_max/Fmax))
+```
+
+```{r,fig.cap="Figure 1. Normalized Fmax Values vs. Angle", echo=FALSE}
+#plot of normalized maxes by Experiment
+dat_Fmax_norm%>%
+  ggplot(aes(x=Angle,y=Fmax_norm,col=Experiment))+geom_point()
+```
+
+```{r,include=FALSE}
+dat_Fmax_norm_mean<-dat_Fmax_norm%>%
+  group_by(Angle,Experiment)%>%
+  summarize(Fmax_norm_mean=mean(Fmax_norm))
+```
+
+```{r,fig.cap="Figure 2. Mean Normalized Fmax vs. Angle", echo=FALSE}
+#Plotting mean values and normalized Fmax
+dat_Fmax_norm_mean%>%
+  ggplot(aes(x=Angle,y=Fmax_norm_mean,col=Experiment))+geom_point()+labs(y="Normalized Mean Fmax", x="Arm Angle")
+```
+
+```{r,include=FALSE}
+#Model
+poly.m2 <- lm(Fmax_norm~poly(Angle,2),data=dat_Fmax_norm) #2nd order
+poly.m3 <- lm(Fmax_norm~poly(Angle,3),data=dat_Fmax_norm) #3rd
+poly.m4 <- lm(Fmax_norm~poly(Angle,4),data=dat_Fmax_norm) #4th
+
+#Fitting best order
+poly.aic<-AICc(poly.m2,poly.m3,poly.m4) 
+print(poly.aic) #2nd order as best fit
+AICs <- dat_Fmax_norm%>%
+  group_by(Subject,Experiment)%>%
+  summarize(
+    m2=AICc(lm(Fmax_norm~poly(Angle,2))),
+    m3=AICc(lm(Fmax_norm~poly(Angle,3))),
+    m4=AICc(lm(Fmax_norm~poly(Angle,4)))
+  )%>%
+  pivot_longer(m2:m4,names_to="model",values_to="AICc")
+
+
+#Fitting Model to predicted values for 1000 angles
+x.pred<-seq(45,157.5,length.out=1000)
+fits <- dat_Fmax_norm%>%
+  group_by(Subject,Experiment)%>%
+  summarize(
+    m2=predict(lm(Fmax_norm~poly(Angle,2)),newdata=data.frame(Angle=x.pred)), #2nd 
+    m3=predict(lm(Fmax_norm~poly(Angle,3)),newdata=data.frame(Angle=x.pred)), #3rd 
+    m4=predict(lm(Fmax_norm~poly(Angle,4)),newdata=data.frame(Angle=x.pred)) #4th 
+  )%>%
+  pivot_longer(m2:m4,names_to="model")%>%
+  group_by(Subject,Experiment,model)%>%
+  summarize(theta_max=x.pred[which.max(value)])
+
+#Combining AIC and fit models
+best.models<-fits%>%
+  left_join(AICs)%>%
+  group_by(Subject,Experiment)%>%
+  mutate(best=AICc==min(AICc))%>%
+  filter(best==TRUE)%>%
+  dplyr::select(-best)
+```
+
+Both figures depict the data collected with force plotted against the forearm angle where force was expressed as a ratio of the maximum value for each subject. The figures depict a larger angle where maximal force was observed for the fatigued trials.
+
+```{r,include=FALSE}
+#Determining significance in the difference between control and fatigue theta_max? 
+anova_thetamax<-anova(lm(theta_max~Experiment,best.models))
+```
+```{r, echo=FALSE}
+kable(anova_thetamax,caption="Table 1. Anova for Theta Max")
+```
+
+Table 1 depicts the significance in the difference between the theta max in control and fatigue trials. 
+
+```{r,include=FALSE}
+#Mean and SEM values for shift in theta_max
+theta_max<-best.models%>%
+  pivot_wider(id_cols=Subject,names_from = Experiment,values_from=theta_max)%>%
+  mutate(shift=fatigue-control)%>%
+  ungroup()%>%
+  summarize(mean.shift=mean(shift,na.rm=TRUE),se.shift=sd(shift,na.rm=TRUE)/sqrt(length(shift)))
+```
+```{r, echo=FALSE}
+kable(theta_max,caption="Table 2. Mean and SEM Values for Theta Max ")
+```
+
+
+
+### Discussion
+
+The collected data demonstrates a shift in the peak force relationship towards larger elbow-forearm angles. This finding can be visualized in figure 2. above, where the fatigued muscle (in blue) achieves a maximal value further to the right of the control. The average shift in the maximal angle of force, or theta max, was to an angle 8.36° larger. This conclusion coincides with prior research highlighted by @macnaughton2006reports. There does appear to be some discrepancy within the data, as the force reaches a local maximum around 112° for the control, but then climbs higher at roughly 130°. Theoretically, this phenomenon should not occur, as force should peak at an intermediate length. The observation of a lone peak between around 110° was expected, but not observed. The increase in force at higher angles was likely caused by the activation of chest and shoulder fibers as the arm straightened. The involvement of chest and shoulder muscles was unavoidable, as the participants had to pull vertically up to record force output. This direction of force output would encourage the use of additional muscle groups, explaining why the force did not peak at the expected range. In future trials, the experiment should be performed against a horizontal surface to isolate the bicep and observe an expected peak. Therefore, the local maximum observed at around 112° for the control and 125° for the experimental likely reflect the true peak for the bicep alone. Regardless of the involvement of other muscles, the maximal force produced when fatigued was shown to take place at greater angles.
+
+### Author Contributions
+Karim: Worked on the discussion and results.
+
+Chris: Worked on the code and graphs.
+
+Joe: Worked on the graphs, intro, and methods.
+
+## CPK comments
+
+Excellent work and spot on! Great job putting the code together to model the shifts. And you found one!! Your discussion is great, too. 
+
+75/75
+
+### References
+
